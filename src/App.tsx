@@ -17,17 +17,19 @@ const App: React.FC = () => {
       alert("Please add a task");
     }
   };
-  
+
   return (
     <div className="App">
-      <span className="heading">Taskify</span>{" "}
       {/* write shortcut 'span.heading' to create span element with class of heading */}
+      <span className="heading">Taskify</span>
       <InputField
         todo={todo}
         setTodo={setTodo}
         handleAdd={handleAdd}
       ></InputField>
-      {Todos.map((todo) => (<li>{todo.text}</li>))}
+      {Todos.map((todo) => (
+        <li>{todo.text}</li>
+      ))}
       <TodoList todos={Todos} setTodos={setTodos}></TodoList>
     </div>
   );
