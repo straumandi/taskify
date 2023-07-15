@@ -27,9 +27,6 @@ const App: React.FC = () => {
         setTodo={setTodo}
         handleAdd={handleAdd}
       ></InputField>
-      {Todos.map((todo) => (
-        <li>{todo.text}</li>
-      ))}
       <TodoList todos={Todos} setTodos={setTodos}></TodoList>
     </div>
   );

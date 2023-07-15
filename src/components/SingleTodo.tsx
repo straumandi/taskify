@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
 import { Todo } from "../model";
@@ -11,17 +11,59 @@ interface Props {
 }
 
 const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }: Props) => {
+  const [edit, setedit] = useState<boolean>(false);
+  const [editTodo, seteditTodo] = useState<string>(todo.text);
+
+  const handleDelete = (id: number) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  const handleDone = (id: number) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
+      )
+    );
+  };
+
+  const handleEdit = (e: React.FormEvent, id: number) => {
+    e.preventDefault(); // prevent page refresh
+
+    setTodos(
+      todos.map((todo) => (todo.id === id ? { ...todo, text: editTodo } : todo))
+    );
+    setedit(false);
+  };
+
   return (
-    <form className="todos__single">
-      <span className="todos__single--text">{todo.text}</span>
+    /* onSubmit get's triggered when user presses enter */
+    <form className="todos__single" onSubmit={(e) => handleEdit(e, todo.id)}>
+      {edit ? (
+        <input
+          value={editTodo}
+          onChange={(e) => seteditTodo(e.target.value)}
+          className="todos__single--text"
+        />
+      ) : todo.isDone ? (
+        <s className="todos__single--text">{todo.text}</s>
+      ) : (
+        <span className="todos__single--text">{todo.text}</span>
+      )}
       <div>
-        <span className="icon">
+        <span
+          className="icon"
+          onClick={() => {
+            if (!edit) {
+              setedit(!edit);
+            }
+          }}
+        >
           <AiFillEdit />
         </span>
-        <span className="icon">
+        <span className="icon" onClick={() => handleDelete(todo.id)}>
           <AiFillDelete />
         </span>
-        <span className="icon">
+        <span className="icon" onClick={() => handleDone(todo.id)}>
           <MdDone />
         </span>
       </div>
